@@ -3,11 +3,14 @@
 namespace LiveStream;
 
 use Exception;
-use LiveStream\Exceptions\InValidResourceException;
-use LiveStream\Resources\Account;
-use LiveStream\Exceptions\LiveStreamException;
-use LiveStream\Interfaces\Resource;
+
 use LiveStream\Resources\Event;
+use LiveStream\Resources\RTMPKey;
+use LiveStream\Resources\Account;
+use LiveStream\Interfaces\Resource;
+
+use LiveStream\Exceptions\LiveStreamException;
+use LiveStream\Exceptions\InValidResourceException;
 
 class LiveStream
 {
@@ -81,7 +84,7 @@ class LiveStream
     {
         if (!$event->fullName) throw new InValidResourceException('Event', 'fullName');
 
-        $response = $this->request("acconts/$accountId/events", true, $event);
+        $response = $this->request("acconts/$accountId/events", 'post', $event);
 
         if ($response === null) return false;
 
@@ -91,21 +94,55 @@ class LiveStream
     }
 
     /**
+     * Get RTMP Key.
+     *
+     * @param  integer $accountId
+     * @param  integer $eventId
+     * 
+     * @return \LiveStream\Resources\RTMPKey|null
+     */
+    public function getRtmpKey(int $accountId, int $eventId): ?RTMPKey
+    {
+        $response = $this->request("accounts/$accountId/events/$eventId/rtmp");
+
+        if ($response === null) return null;
+
+        return RTMPKey::fromObject(json_decode($response));
+    }
+
+    /**
+     * Reset RTMPKey
+     *
+     * @param  integer $accountId
+     * @param  integer $eventId
+     * @return \LiveStream\Resources\RTMPKey|null
+     */
+    public function resetRtmpKey(int $accountId, int $eventId): ?RTMPKey
+    {
+        $response = $this->request("accounts/$accountId/events/$eventId/rtmp", 'put');
+
+        if ($response === null) return null;
+
+        return RTMPKey::fromObject(json_decode($response));
+    }
+
+    /**
      * CURL Request
      *
      * @param  string $endpoint
      * @return 
      */
-    private function request(string $endpoint, bool $post = false, ?Resource $body = null): ?string
+    private function request(string $endpoint, string $verb = 'get', ?Resource $body = null): ?string
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->get_base_url() . $endpoint);
         curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey . ':');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        if ($post) {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $body->getRawBody());
+        if ($verb != 'get') {
+            if ($verb == 'post') curl_setopt($ch, CURLOPT_POST, true);
+            if ($verb == 'put') curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            if ($body) curl_setopt($ch, CURLOPT_POSTFIELDS, $body->getRawBody());
         }
 
         $response = curl_exec($ch);
@@ -126,7 +163,7 @@ class LiveStream
      *
      * @return string
      */
-    private function get_base_url():string
+    private function get_base_url(): string
     {
         return getenv('LIB_ENV') == 'testing' ? 'http://127.0.0.1:3067/' : self::BASE_URL;
     }
