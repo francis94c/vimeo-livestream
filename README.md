@@ -11,3 +11,14 @@ $ composer require francis94c/vimeo-livestream
 ```
 
 ## Usage ##
+```php
+use LiveStream\LiveStream;
+
+$livestream = new LiveStream('[YOUR_API_KEY]');
+
+// Get Accounts
+$accounts = $livestream->getAccounts(); // Returns an array of account resources.
+
+// Get Specific Account
+$account = $livestream->getAccount(23456 /*Acount ID*/); // Returns \LiveStream\Resources\Account.
+```
