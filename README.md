@@ -37,13 +37,14 @@ $account = $livestream->getAccount(23456 /*Account ID*/); // Returns \LiveStream
 ```php
 use LiveStream\Resources\Event;
 
-// Create Event
 $event = new Event("A Career Master Class" /*fullName*/);
 // See https://livestream.com/developers/docs/api/#event-object
 $event->setShortName("Master Class"); /*Or*/ $event->shortName = 'Master Class';
 $event->setStartTime("2020-07-20 23:56:20"); /*Or*/ $event->startTime = /*Time in ISO8601 date time format*/
+```
 
-// Get RTMPKey
+### Get RTMP Key ###
+```php
 $key = $livestream->getRtmpKey(3456 /*Account ID*/, 4567, /*Event ID*/); // Returns \LiveStream\Resources\RTMPKey.
 echo $key->id . ' --- ' . $key->rtmpUrl;
 // OR
