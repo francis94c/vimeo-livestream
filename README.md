@@ -19,18 +19,23 @@ use LiveStream\LiveStream;
 $livestream = new LiveStream('[YOUR_API_KEY]');
 ```
 
-Before you proceed, Note that `$livestream` function calls that return null, indicates that the requested resource was not found. In summary, a 404 HTTP Response Code was received as a result of the call. 
+Before you proceed, note that `$livestream` function calls that return null, indicates that the requested resource was not found. In summary, a 404 HTTP Response Code was received as a result of the call. 
 
 __Every other HTTP Response Code will throw an Exception.__
 
+### Get Accounts ###
+```php
+$accounts = $livestream->getAccounts(); // Returns an array of account resources.
+```
+
+### Get Specific Accounts ###
+```php
+$account = $livestream->getAccount(23456 /*Account ID*/); // Returns \LiveStream\Resources\Account.
+```
+
+### Create an Event ###
 ```php
 use LiveStream\Resources\Event;
-
-// Get Accounts
-$accounts = $livestream->getAccounts(); // Returns an array of account resources.
-
-// Get Specific Account
-$account = $livestream->getAccount(23456 /*Account ID*/); // Returns \LiveStream\Resources\Account.
 
 // Create Event
 $event = new Event("A Career Master Class" /*fullName*/);
