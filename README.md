@@ -28,7 +28,7 @@ __Every other HTTP Response Code will throw an Exception.__
 $accounts = $livestream->getAccounts(); // Returns an array of account resources.
 ```
 
-### Get Specific Accounts ###
+### Get Specific Account ###
 ```php
 $account = $livestream->getAccount(23456 /*Account ID*/); // Returns \LiveStream\Resources\Account.
 ```
