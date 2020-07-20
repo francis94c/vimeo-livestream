@@ -3,8 +3,11 @@
 namespace LiveStream;
 
 use Exception;
+use LiveStream\Exceptions\InValidResourceException;
 use LiveStream\Resources\Account;
 use LiveStream\Exceptions\LiveStreamException;
+use LiveStream\Interfaces\Resource;
+use LiveStream\Resources\Event;
 
 class LiveStream
 {
@@ -68,17 +71,43 @@ class LiveStream
     }
 
     /**
+     * Create New Event
+     *
+     * @param  integer $accountId
+     * @param  Event $event
+     * @return boolean
+     */
+    public function createEvent(int $accountId, Event &$event): bool
+    {
+        if (!$event->fullName) throw new InValidResourceException('Event', 'fullName');
+
+        $response = $this->request("acconts/$accountId/events", true, $event);
+
+        if ($response === null) return false;
+
+        $event = Event::fromObject(json_decode($response));
+
+        return true;
+    }
+
+    /**
      * CURL Request
      *
      * @param  string $endpoint
      * @return 
      */
-    private function request(string $endpoint): ?string
+    private function request(string $endpoint, bool $post = false, ?Resource $body = null): ?string
     {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, self::BASE_URL . $endpoint);
+        curl_setopt($ch, CURLOPT_URL, $this->get_base_url() . $endpoint);
         curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey . ':');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        if ($post) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $body->getRawBody());
+        }
+
         $response = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
@@ -90,5 +119,15 @@ class LiveStream
         if ($code <= 199) throw new Exception("A CURL erorr with code '$code', has occurred.");
 
         throw new LiveStreamException(self::ERROR_CODES[$code]);
+    }
+
+    /**
+     * Get Base URL.
+     *
+     * @return string
+     */
+    private function get_base_url():string
+    {
+        return getenv('LIB_ENV') == 'testing' ? 'http://127.0.0.1:3067/' : self::BASE_URL;
     }
 }
