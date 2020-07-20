@@ -49,7 +49,9 @@ $key = $livestream->getRtmpKey(3456 /*Account ID*/, 4567, /*Event ID*/); // Retu
 echo $key->id . ' --- ' . $key->rtmpUrl;
 // OR
 echo $key->getId() . ' --- ' . $key->getRtmpUrl();
+```
 
-// Reset RTMPKey
+### Reset RTMP Key ###
+```php
 $key = $livestream->resetRtmpKey(3456 /*Account ID*/, 4567, /*Event ID*/);
 ```
