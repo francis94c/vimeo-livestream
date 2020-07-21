@@ -244,12 +244,37 @@ class Event implements Resource
     {
         $body = ['fullName' => $this->data->fullName];
 
-        if ($this->data->shortName ?? null) $body['shortName'] = $this->data->shortName;
-        if ($this->data->startTime ?? null) $body['startTime'] = $this->data->startTime;
-        if ($this->data->endTime ?? null) $body['endTime'] = $this->data->endTime;
-        if ($this->data->draft ?? null) $body['draft'] = $this->data->draft;
-        if ($this->data->description ?? null) $body['description'] = $this->data->description;
-        if ($this->data->tags ?? null) $body['tags'] = rtrim($this->data->tags, ',');
+        if ($this->data->shortName ?? null)
+            $body['shortName'] = $this->data->shortName;
+
+        if ($this->data->startTime ?? null)
+            $body['startTime'] = $this->data->startTime;
+
+        if ($this->data->endTime ?? null)
+            $body['endTime'] = $this->data->endTime;
+
+        if ($this->data->draft ?? null)
+            $body['draft'] = $this->data->draft;
+
+        if ($this->data->description ?? null)
+            $body['description'] = $this->data->description;
+
+        if ($this->data->tags ?? null)
+            $body['tags'] = rtrim($this->data->tags, ',');
+
+        /* TODO: Getters & Setters */
+        if ($this->data->isPublic ?? null) $body['isPublic'] = $this->data->isPublic;
+        if ($this->data->isSearchable ?? null) $body['isSearchable'] = $this->data->isSearchable;
+        if ($this->data->viewerCountVisible ?? null) $body['viewerCountVisible'] = $this->data->viewerCountVisible;
+        if ($this->data->postCommentsEnabled ?? null) $body['postCommentsEnabled'] = $this->data->postCommentsEnabled;
+        if ($this->data->liveChatEnabled ?? null) $body['liveChatEnabled'] = $this->data->liveChatEnabled;
+        if ($this->data->isEmbeddable ?? null) $body['isEmbeddable'] = $this->data->isEmbeddable;
+        if ($this->data->isPasswordProtected ?? null) $body['isPasswordProtected'] = $this->data->isPasswordProtected;
+        if ($this->data->password ?? null) $body['password'] = $this->data->password;
+        if ($this->data->isWhiteLabeled ?? null) $body['isWhiteLabeled'] = $this->data->isWhiteLabeled;
+        if ($this->data->embedRestriction ?? null && in_array($this->data->embedRestriction, ['off', 'whitelist', 'blacklist'])) $body['embedRestriction'] = $this->data->embedRestriction;
+        if ($this->data->embedRestrictionWhitelist ?? null) $body['embedRestrictionWhitelist'] = $this->data->embedRestrictionWhitelist;
+        if ($this->data->embedRestrictionBlacklist ?? null) $body['embedRestrictionBlacklist'] = $this->data->embedRestrictionBlacklist;
 
         return json_encode($body);
     }

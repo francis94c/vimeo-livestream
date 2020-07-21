@@ -124,7 +124,7 @@ class EventsTest extends TestCase
      *
      * @return void
      */
-    public function canCreateSimpleEventAndCheckDefaults():void
+    public function testCanCreateEventAndCheckDefaults(): void
     {
         $livestream = new LiveStream('abc');
 
@@ -139,6 +139,43 @@ class EventsTest extends TestCase
         $this->assertTrue($event->isDraft());
         $this->assertTrue($event->draft);
 
-        $this->assertNull($event->getStartTime());
+        $this->assertEquals('', $event->getStartTime());
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function testCanCreateEvent(): void
+    {
+        $livestream = new LiveStream('abc');
+
+        $event = new Event("Physics Live Class on Motions.");
+
+        $date = date('Y-m-d H:i:s');
+
+        $event->setDescription("Motion")
+            ->setStartTime($date)
+            ->setEndTime($date)
+            ->setShortName("Physics Short Name")
+            ->setIsDraft(false);
+
+        $livestream->createEvent(564653, $event);
+
+        $this->assertEquals('Physics Live Class on Motions.', $event->getFullName());
+        $this->assertEquals('Physics Live Class on Motions.', $event->fullName);
+
+        $this->assertEquals('Motion', $event->getDescription());
+        $this->assertEquals('Motion', $event->description);
+
+        $this->assertEquals(date('c', strtotime($date)), $event->getStartTime());
+        $this->assertEquals(date('c', strtotime($date)), $event->startTime);
+
+        $this->assertEquals(date('c', strtotime($date)), $event->getEndTime());
+        $this->assertEquals(date('c', strtotime($date)), $event->endTime);
+
+        $this->assertEquals('Physics Short Name', $event->getShortName());
+        $this->assertEquals('Physics Short Name', $event->shortName);
     }
 }

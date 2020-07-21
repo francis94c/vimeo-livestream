@@ -140,12 +140,12 @@ class LiveStreamServerStub
                 "thumbnailUrl" => "https=>//cdn.livestream.com/newlivestream/poster-default.jpeg",
                 "smallUrl" => "https=>//cdn.livestream.com/newlivestream/poster-default.jpeg"
             ],
-            "description" => null,
+            "description" => Flight::request()->data->description,
             "likes" => [
                 "total" => 0
             ],
             "fullName" => Flight::request()->data->fullName,
-            "shortName" => null,
+            "shortName" => Flight::request()->data->shortName,
             "ownerAccountId" => $accountId,
             "viewerCount" => 0,
             "createdAt" => date('c'),

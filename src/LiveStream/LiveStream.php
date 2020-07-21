@@ -89,8 +89,12 @@ class LiveStream
     {
         if (!$event->fullName) throw new InValidResourceException('Event', 'fullName');
 
-        $response = $this->request("acconts/$accountId/events", 'post', $event);
+        if ($event->isPasswordProtected && !$event->password) {
+            throw new InValidResourceException('Event', 'password (password must be present for a password protected event)');
+        }
 
+        $response = $this->request("accounts/$accountId/events", 'post', $event);
+        
         if ($response === null) return false;
 
         $event = Event::fromObject(json_decode($response));
@@ -106,9 +110,19 @@ class LiveStream
      * 
      * @return \LiveStream\Resources\RTMPKey|null
      */
-    public function getRtmpKey(int $accountId, int $eventId): ?RTMPKey
-    {
-        $response = $this->request("accounts/$accountId/events/$eventId/rtmp");
+    public function getRtmpKey(
+        int $accountId,
+        int $eventId,
+        bool $notifyFollowers = false,
+        bool $publishVideo = false,
+        bool $saveVideo = false
+    ): ?RTMPKey {
+        
+        $response = $this->request("accounts/$accountId/events/$eventId/rtmp", 'get', null, [
+            'notifyFollowers' => $notifyFollowers,
+            'publishVideo'    => $publishVideo,
+            'saveVideo'       => $saveVideo
+        ]);
 
         if ($response === null) return null;
 
@@ -137,10 +151,20 @@ class LiveStream
      * @param  string $endpoint
      * @return 
      */
-    private function request(string $endpoint, string $verb = 'get', ?Resource $body = null): ?string
-    {
+    private function request(
+        string $endpoint,
+        string $verb = 'get',
+        ?Resource $body = null,
+        ?array $query = null
+    ): ?string {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->get_base_url() . $endpoint);
+
+        curl_setopt(
+            $ch,
+            CURLOPT_URL,
+            $this->get_base_url() . $endpoint . ($query ? '?' . http_build_query($query) : '')
+        );
+
         curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey . ':');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -157,6 +181,7 @@ class LiveStream
 
         $response = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
         curl_close($ch);
 
         if ($code == 200 || $code == 201) return $response;
