@@ -236,11 +236,11 @@ class Event implements Resource
     }
 
     /**
-     * Resource Interface Method: Get Resource as FormURLEncoded String.
+     * Resource Interface Method: Get Resource as JSON String.
      *
      * @return string
      */
-    public function getRawBody(): string
+    public function getResourceBody(): string
     {
         $body = ['fullName' => $this->data->fullName];
 

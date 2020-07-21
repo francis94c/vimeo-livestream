@@ -9,8 +9,8 @@ interface Resource
      *
      * @return string
      */
-    public function getRawBody(): string;
-    
+    public function getResourceBody(): string;
+
     /**
      * Undocumented function
      *

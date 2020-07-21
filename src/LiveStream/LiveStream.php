@@ -175,7 +175,7 @@ class LiveStream
                 curl_setopt($ch, CURLOPT_HTTPHEADER, [
                     'Content-Type: ' . $body->getContentType()
                 ]);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $body->getRawBody());
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $body->getResourceBody());
             }
         }
 
