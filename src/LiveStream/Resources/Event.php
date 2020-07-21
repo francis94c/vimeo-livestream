@@ -94,7 +94,7 @@ class Event implements Resource
      *
      * @return string
      */
-    public function getStartTime(): string
+    public function getStartTime(): ?string
     {
         return $this->data->startTime ?? null;
     }
@@ -116,9 +116,9 @@ class Event implements Resource
      *
      * @return string
      */
-    public function getEndTime(): string
+    public function getEndTime(): ?string
     {
-        return $this->data->endTime;
+        return $this->data->endTime ?? null;
     }
 
     /**
@@ -157,6 +157,53 @@ class Event implements Resource
     }
 
     /**
+     * Get Event Short Name.
+     *
+     * @return string|null
+     */
+    public function getShortName(): ?string
+    {
+        return $this->data->shortName ?? null;
+    }
+
+    /**
+     * Set Event Description
+     *
+     * @param  string $description
+     * @return Event
+     */
+    public function setDescription(string $description): Event
+    {
+        $this->data->description = $description;
+        return $this;
+    }
+
+    /**
+     * Add Event Tag
+     *
+     * @param  string $tag
+     * @return \LiveStream\Resources\Event
+     */
+    public function addTag(string $tag): Event
+    {
+        if (!isset($this->data->tags)) $this->data->tags = '';
+
+        $this->data->tags .= rtrim($tag, ',') . ',';
+
+        return $this;
+    }
+
+    /**
+     * Get Tags.
+     *
+     * @return string
+     */
+    public function getTags(): string
+    {
+        return $this->data->tags ?? '';
+    }
+
+    /**
      * Resource Interface Method: Get Resource as FormURLEncoded String.
      *
      * @return string
@@ -168,7 +215,9 @@ class Event implements Resource
         if ($this->data->shortName ?? null) $body['shortName'] = $this->data->shortName;
         if ($this->data->startTime ?? null) $body['startTime'] = $this->data->startTime;
         if ($this->data->endTime ?? null) $body['endTime'] = $this->data->endTime;
-        if ($this->data->draft ?? true) $body['draft'] = $this->data->draft;
+        if ($this->data->draft ?? null) $body['draft'] = $this->data->draft;
+        if ($this->data->description ?? null) $body['description'] = $this->data->description;
+        if ($this->data->tags ?? null) $body['tags'] = rtrim($this->data->tags, ',');
 
         return http_build_query($body);
     }
