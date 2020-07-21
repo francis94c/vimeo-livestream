@@ -4,6 +4,11 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 class LiveStreamServerStub
 {
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function processGetAccountsRequest(): void
     {
         Flight::json([
@@ -71,6 +76,51 @@ class LiveStreamServerStub
             ]
         ], 200);
     }
+    public function processGetSpecificAccountRequest(int $accountId):void
+    {
+        if ($accountId == 18855760) {
+            Flight::json([
+                "id" => 18855760,
+                "description" => "API Test Account 2",
+                "email" => "apitest2@livestream.com",
+                "timezone" => "Asia/Kolkata",
+                "picture" => [
+                    "url" => "https=>//img.new.livestream.com/accounts/00000000011fb74f/c1d97257-82a4-4003-a507-8e1305fc5c86.jpg",
+                    "thumbnailUrl" => "https=>//img.new.livestream.com/accounts/00000000011fb74f/c1d97257-82a4-4003-a507-8e1305fc5c86_50x50.jpg"
+                ],
+                "followers" => [
+                    "total" => 10
+                ],
+                "following" => [
+                    "total" => 12
+                ],
+                "fullName" => "Apitest2",
+                "shortName" => "apitest2",
+                "createdAt" => "2016-5-15T06=>59=>07.783Z",
+                "draftEvents" => [
+                    "total" => 0
+                ],
+                "privateEvents" => [
+                    "total" => 2
+                ],
+                "upcomingEvents" => [
+                    "total" => 4
+                ],
+                "pastEvents" => [
+                    "total" => 1
+                ]
+            ]);
+            return;
+        }
+
+        Flight::notFound();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function processCreateEventRequest(): void
     {
     }
@@ -82,6 +132,7 @@ $stub = new LiveStreamServerStub();
  * Routes
  */
 Flight::route('GET /accounts', [$stub, 'processGetAccountsRequest']);
+Flight::route('GET /accounts/@acountId', [$stub, 'processGetSpecificAccountRequest']);
 
 /**
  * Configurations
