@@ -34,9 +34,8 @@ jobs:
 
     - uses: nick-invision/retry@v1
       env:
-        FIRST_NAME: Mona
-        middle_name: The
-        Last_Name: Octocat
+        COVERALLS_SERVICE_NAME: GitHub Actions
+        COVERALLS_REPO_TOKEN: ${{ secerts.COVERALLS_REPO_TOKEN }}
       with:
         timeout_minutes: 3
         max_attempts: 3
