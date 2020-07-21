@@ -21,7 +21,12 @@ class LiveStream
 
     const ERROR_CODES = [
         400 => 'Bad Request: Your request is not properly constructed.',
-        401 => 'Unauthorized: Your API key is incorrect.'
+        401 => 'Unauthorized: Your API key is incorrect.',
+        403 => 'Forbidden:',
+        405 => 'Method Not Allowed: You tried to access a resource with an invalid method.',
+        406 => 'Not Acceptable: You requested a format that is not JSON.',
+        500 => 'Internal Server Error: We had a problem with our server. Please try again later.',
+        503 => 'Service Unavailable: We are temporarily offline for maintanance. Please try again later.'
     ];
 
     /**
@@ -154,6 +159,8 @@ class LiveStream
         if ($code == 404) return null;
 
         if ($code <= 199) throw new Exception("A CURL erorr with code '$code', has occurred.");
+
+        if ($code == 403) throw new LiveStreamException(self::ERROR_CODES[$code] . ' ' . json_decode($response)->message);
 
         throw new LiveStreamException(self::ERROR_CODES[$code]);
     }
