@@ -18,7 +18,7 @@ jobs:
       uses: shivammathur/setup-php@v1
       with:
         php-version: '7.3'
-        extensions: mbstring, intl, pdo_mysql, gd, zip, sqlite
+        extensions: mbstring, intl, pdo_mysql, gd, zip, sqlite, xdebug
         ini-values: post_max_size=256M, short_open_tag=On
         coverage: pcov
         tools: phpunit:8.2.3
@@ -30,7 +30,7 @@ jobs:
       run: bash ./run_tests.sh
     
     - name: Composer Install PHP-Coverall
-      run: composer global require cedx/coveralls
+      run: composer require cedx/coveralls
 
     - uses: nick-invision/retry@v1
       env:
