@@ -124,7 +124,7 @@ class EventsTest extends TestCase
      *
      * @return void
      */
-    public function canCreateEvent():void
+    public function canCreateSimpleEventAndCheckDefaults():void
     {
         $livestream = new LiveStream('abc');
 
