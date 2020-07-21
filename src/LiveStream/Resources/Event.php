@@ -20,10 +20,10 @@ class Event implements Resource
      * @param string  $fullName
      * @param boolean $init
      */
-    public function __construct(string $fullName, bool $init = false)
+    public function __construct(string $fullName, bool $init = true)
     {
         if ($init) {
-            $this->data - new stdClass();
+            $this->data = new stdClass();
             $this->data->fullName  = $fullName;
         }
     }
@@ -75,6 +75,28 @@ class Event implements Resource
     public function __isset(string $key)
     {
         return isset($this->data->$key);
+    }
+
+    /**
+     * Set Full Name.
+     *
+     * @param  string $fullName
+     * @return \LiveStream\Resources\Event
+     */
+    public function setFullName(string $fullName): Event
+    {
+        $this->data->fullName = $fullName;
+        return $this;
+    }
+
+    /**
+     * Get Full Name.
+     *
+     * @return string|null
+     */
+    public function getFullName(): ?string
+    {
+        return $this->data->fullName ?? null;
     }
 
     /**
