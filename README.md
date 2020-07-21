@@ -1,3 +1,5 @@
+![build](https://github.com/francis94c/vimeo-livestream/workflows/build/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/francis94c/vimeo-livestream/badge.svg?branch=master)](https://coveralls.io/github/francis94c/vimeo-livestream?branch=master)
+
 # vimeo-livestream
 PHP Client Library for Vimeo Live Stream.
 
