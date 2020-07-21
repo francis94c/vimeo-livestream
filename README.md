@@ -1,4 +1,4 @@
-![build](https://github.com/francis94c/vimeo-livestream/workflows/build/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/francis94c/vimeo-livestream/badge.svg?branch=master)](https://coveralls.io/github/francis94c/vimeo-livestream?branch=master)
+![build](https://github.com/francis94c/vimeo-livestream/workflows/build/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/francis94c/vimeo-livestream/badge.svg?branch=master)](https://coveralls.io/github/francis94c/vimeo-livestream?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/5f2940c68fd16c1812fc/maintainability)](https://codeclimate.com/github/francis94c/vimeo-livestream/maintainability) 
 
 # vimeo-livestream
 PHP Client Library for Vimeo Live Stream.
