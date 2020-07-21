@@ -37,7 +37,7 @@ class Event implements Resource
     public static function fromObject(?object $object): ?Event
     {
         if ($object == null) return null;
-        
+
         $instance = new static(false);
         $instance->data = $object;
         return $instance;
@@ -80,13 +80,68 @@ class Event implements Resource
     /**
      * Set Event Start Time.
      *
-     * @param string $strtime
-     * @return Event
+     * @param  string $strtime
+     * @return \LiveStream\Resources\Event
      */
     public function setStartTime(string $strtime): Event
     {
         $this->data->startTime = date('c', strtotime($strtime));
         return $this;
+    }
+
+    /**
+     * Get Start Time
+     *
+     * @return string
+     */
+    public function getStartTime(): string
+    {
+        return $this->data->startTime ?? null;
+    }
+
+    /**
+     * Set End Time
+     *
+     * @param  string $strtime
+     * @return \LiveStream\Resources\Event
+     */
+    public function setEndTime(string $strtime): Event
+    {
+        $this->data->endTime = date('c', strtotime($strtime));
+        return $this;
+    }
+
+    /**
+     * Get End Time.
+     *
+     * @return string
+     */
+    public function getEndTime(): string
+    {
+        return $this->data->endTime;
+    }
+
+    /**
+     * Set Is Draft.
+     *
+     * @param boolean $isDraft
+     * 
+     * @return \LiveStream\Resources\Event
+     */
+    public function setIsDraft(bool $isDraft = true): Event
+    {
+        $this->data->draft = $isDraft;
+        return $this;
+    }
+
+    /**
+     * Get Is Draft.
+     *
+     * @return boolean
+     */
+    public function isDraft(): bool
+    {
+        return $this->data->draft ?? true;
     }
 
     /**
@@ -112,6 +167,8 @@ class Event implements Resource
 
         if ($this->data->shortName ?? null) $body['shortName'] = $this->data->shortName;
         if ($this->data->startTime ?? null) $body['startTime'] = $this->data->startTime;
+        if ($this->data->endTime ?? null) $body['endTime'] = $this->data->endTime;
+        if ($this->data->draft ?? true) $body['draft'] = $this->data->draft;
 
         return http_build_query($body);
     }
