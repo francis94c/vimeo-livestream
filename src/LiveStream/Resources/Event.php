@@ -201,6 +201,16 @@ class Event implements Resource
     }
 
     /**
+     * Get Description.
+     *
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->data->description ?? null;
+    }
+
+    /**
      * Add Event Tag
      *
      * @param  string $tag

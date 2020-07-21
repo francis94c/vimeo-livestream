@@ -86,5 +86,35 @@ class EventsTest extends TestCase
 
         $this->assertFalse($event->isDraft());
         $this->assertFalse($event->draft);
+
+        $event->draft = true;
+
+        $this->assertTrue($event->isDraft());
+        $this->assertTrue($event->draft);
+
+        $event->draft = false;
+
+        $this->assertFalse($event->isDraft());
+        $this->assertFalse($event->draft);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function canSetDescription(): void
+    {
+        $event = new Event("Full Name");
+
+        $event->setDescription('Description 1');
+
+        $this->assertEquals('Description 1', $event->getDescription());
+        $this->assertEquals('Description 1', $event->description);
+
+        $event->description = 'Description 2';
+
+        $this->assertEquals('Description 2', $event->getDescription());
+        $this->assertEquals('Description 2', $event->description);
     }
 }
