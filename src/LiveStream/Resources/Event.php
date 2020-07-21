@@ -251,6 +251,16 @@ class Event implements Resource
         if ($this->data->description ?? null) $body['description'] = $this->data->description;
         if ($this->data->tags ?? null) $body['tags'] = rtrim($this->data->tags, ',');
 
-        return http_build_query($body);
+        return json_encode($body);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getContentType(): string
+    {
+        return 'application/json';
     }
 }

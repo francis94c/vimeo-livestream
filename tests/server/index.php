@@ -76,7 +76,7 @@ class LiveStreamServerStub
             ]
         ], 200);
     }
-    public function processGetSpecificAccountRequest(int $accountId):void
+    public function processGetSpecificAccountRequest(int $accountId): void
     {
         if ($accountId == 18855760) {
             Flight::json([
@@ -121,8 +121,53 @@ class LiveStreamServerStub
      *
      * @return void
      */
-    public function processCreateEventRequest(): void
+    public function processCreateEventRequest(int $accountId): void
     {
+        if (!Flight::request()->type == 'application/json') {
+            Flight::json([
+                'code'    => 400,
+                'message' => 'Your request is not properly constructed'
+            ], 400);
+            return;
+        }
+
+        if (!$accountId == 564653) return;
+
+        Flight::json([
+            "id" => 5201483,
+            "logo" => [
+                "url" => "https=>//cdn.livestream.com/newlivestream/poster-default.jpeg",
+                "thumbnailUrl" => "https=>//cdn.livestream.com/newlivestream/poster-default.jpeg",
+                "smallUrl" => "https=>//cdn.livestream.com/newlivestream/poster-default.jpeg"
+            ],
+            "description" => null,
+            "likes" => [
+                "total" => 0
+            ],
+            "fullName" => Flight::request()->data->fullName,
+            "shortName" => null,
+            "ownerAccountId" => $accountId,
+            "viewerCount" => 0,
+            "createdAt" => date('c'),
+            "startTime" => Flight::request()->data->startTime ?? '',
+            "endTime" => Flight::request()->data->endTime ?? '',
+            "draft" => Flight::request()->data->draft ?? true,
+            "tags" => explode(',', Flight::request()->data->tags ?? ''),
+            "isPublic" => Flight::request()->data->isPublic ?? true,
+            "isSearchable" => Flight::request()->data->isSearchable ?? true,
+            "viewerCountVisible" => Flight::request()->data->viewerCountVisible ?? true,
+            "postCommentsEnabled" => Flight::request()->data->postCommentsEnabled ?? true,
+            "liveChatEnabled" => Flight::request()->data->liveChatEnabled ?? true,
+            "isEmbeddable" => Flight::request()->data->isEmbeddable ?? true,
+            "isPasswordProtected" => false,
+            "isWhiteLabeled" => true,
+            "embedRestriction" => "off",
+            "embedRestrictionWhitelist" => [
+                "*.lsops.org/*"
+            ],
+            "embedRestrictionBlacklist" => null,
+            "isLive" => false
+        ], 200);
     }
 }
 
@@ -133,6 +178,7 @@ $stub = new LiveStreamServerStub();
  */
 Flight::route('GET /accounts', [$stub, 'processGetAccountsRequest']);
 Flight::route('GET /accounts/@acountId', [$stub, 'processGetSpecificAccountRequest']);
+Flight::route('POST /accounts/@accountId/events', [$stub, 'processCreateEventRequest']);
 
 /**
  * Configurations

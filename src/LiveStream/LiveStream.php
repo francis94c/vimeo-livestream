@@ -147,7 +147,12 @@ class LiveStream
         if ($verb != 'get') {
             if ($verb == 'post') curl_setopt($ch, CURLOPT_POST, true);
             if ($verb == 'put') curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            if ($body) curl_setopt($ch, CURLOPT_POSTFIELDS, $body->getRawBody());
+            if ($body) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Content-Type: ' . $body->getContentType()
+                ]);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $body->getRawBody());
+            }
         }
 
         $response = curl_exec($ch);

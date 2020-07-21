@@ -117,4 +117,28 @@ class EventsTest extends TestCase
         $this->assertEquals('Description 2', $event->getDescription());
         $this->assertEquals('Description 2', $event->description);
     }
+
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function canCreateEvent():void
+    {
+        $livestream = new LiveStream('abc');
+
+        $event = new Event("Physics Live Class on Motions.");
+
+        $livestream->createEvent(564653, $event);
+
+        $this->assertEquals('Physics Live Class on Motions.', $event->getFullName());
+        $this->assertEquals('Physics Live Class on Motions.', $event->fullName);
+
+        // Test Defaults
+        $this->assertTrue($event->isDraft());
+        $this->assertTrue($event->draft);
+
+        $this->assertNull($event->getStartTime());
+    }
 }
