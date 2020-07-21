@@ -48,6 +48,8 @@ final class AccountsTest extends TestCase
 
         $account = $livestream->getAccount(18855760);
 
+        $this->assertInstanceOf(Account::class, $account);
+
         $this->assertEquals(18855760, $account->id);
         $this->assertEquals('Apitest2', $account->fullName);
     }
