@@ -159,7 +159,9 @@ class EventsTest extends TestCase
             ->setStartTime($date)
             ->setEndTime($date)
             ->setShortName("Physics Short Name")
-            ->setIsDraft(false);
+            ->setIsDraft(false)
+            ->addTag('a')
+            ->addTag('a');
 
         $livestream->createEvent(564653, $event);
 
@@ -177,5 +179,8 @@ class EventsTest extends TestCase
 
         $this->assertEquals('Physics Short Name', $event->getShortName());
         $this->assertEquals('Physics Short Name', $event->shortName);
+
+        $this->assertEquals(['a', 'a'], $event->getTags());
+        $this->assertEquals(['a', 'a'], $event->tags);
     }
 }

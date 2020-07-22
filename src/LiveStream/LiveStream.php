@@ -94,7 +94,7 @@ class LiveStream
         }
 
         $response = $this->request("accounts/$accountId/events", 'post', $event);
-        
+
         if ($response === null) return false;
 
         $event = Event::fromObject(json_decode($response));
@@ -117,7 +117,7 @@ class LiveStream
         bool $publishVideo = false,
         bool $saveVideo = false
     ): ?RTMPKey {
-        
+
         $response = $this->request("accounts/$accountId/events/$eventId/rtmp", 'get', null, [
             'notifyFollowers' => $notifyFollowers,
             'publishVideo'    => $publishVideo,
@@ -158,6 +158,8 @@ class LiveStream
         ?array $query = null
     ): ?string {
         $ch = curl_init();
+
+        if (!$ch) throw new Exception("Could not initialize CURL.");
 
         curl_setopt(
             $ch,

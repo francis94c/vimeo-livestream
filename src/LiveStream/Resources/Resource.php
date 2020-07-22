@@ -12,7 +12,7 @@ class Resource
      *
      * @var object
      */
-    private $data;
+    protected $data;
 
     /**
      * Class Constructor.
@@ -32,6 +32,8 @@ class Resource
      */
     public static function fromObject(object $object): Resource
     {
+        if ($object == null) return null;
+
         $instance = new static(false);
         $instance->data = $object;
         return $instance;
@@ -72,7 +74,7 @@ class Resource
     }
 
     /**
-     * Undocumented function
+     * Stictly for Setters and Getter.
      *
      * @param string $name
      * @param array $arguments
@@ -84,7 +86,7 @@ class Resource
             return $this->get_called_value($name);
         } elseif (substr($name, 0, 3) == 'set') {
             $this->set_called_value($name, $arguments[0]);
-            return;
+            return $this; // Method Chaining.
         }
 
         throw new BadMethodCallException("Function '$name' does not exist.");
@@ -99,10 +101,7 @@ class Resource
      */
     private function get_called_value(string $function)
     {
-        if (!isset($this->data->{lcfirst(substr($function, 3, strlen($function) - 3))}))
-            throw new BadMethodCallException("Function '$function' does not exist.");
-
-        return $this->data->{lcfirst(substr($function, 3, strlen($function) - 3))};
+        return $this->data->{lcfirst(substr($function, 3, strlen($function) - 3))} ?? null;
     }
 
     /**
@@ -114,9 +113,6 @@ class Resource
      */
     private function set_called_value(string $function, $value): void
     {
-        if (!isset($this->data->{lcfirst(substr($function, 3, strlen($function) - 3))}))
-            throw new BadMethodCallException("Function '$function' does not exist.");
-
         $this->data->{lcfirst(substr($function, 3, strlen($function) - 3))} = $value;
     }
 }
