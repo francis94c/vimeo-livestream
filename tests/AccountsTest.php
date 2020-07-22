@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use BadMethodCallException;
 use LiveStream\LiveStream;
 use PHPUnit\Framework\TestCase;
 use LiveStream\Resources\Account;
@@ -29,12 +30,23 @@ final class AccountsTest extends TestCase
         $this->assertInstanceOf(Account::class, $accounts[1]);
 
         $this->assertEquals(18855759, $accounts[0]->id);
+        $this->assertEquals(18855759, $accounts[0]->getId());
 
         $this->assertEquals(18855760, $accounts[1]->id);
+        $this->assertEquals(18855760, $accounts[1]->getId());
         $this->assertEquals('Apitest2', $accounts[1]->fullName);
+        $this->assertEquals('Apitest2', $accounts[1]->getFullName());
 
         $this->assertInstanceOf(Picture::class, $accounts[0]->picture);
         $this->assertInstanceOf(Picture::class, $accounts[1]->picture);
+
+        $this->expectException(BadMethodCallException::class);
+
+        $accounts[0]->getNonExistentField();
+
+        $this->expectException(BadMethodCallException::class);
+
+        $accounts[1]->okayTheresNoWayThisWouldWork();
     }
 
     /**
