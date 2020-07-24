@@ -15,10 +15,20 @@ use LiveStream\Exceptions\InValidResourceException;
 class LiveStream
 {
     /**
+     * LiveStream Instance
+     *
+     * @var \LiveStream\LiveStream;
+     */
+    private static $instance = null;
+
+    /**
      * Live Stream API Base URL.
      */
     const BASE_URL = 'https://livestreamapis.com/v3/';
 
+    /**
+     * LiveStream API HTTP Codes.
+     */
     const ERROR_CODES = [
         400 => 'Bad Request: Your request is not properly constructed.',
         401 => 'Unauthorized: Your API key is incorrect.',
@@ -87,11 +97,7 @@ class LiveStream
      */
     public function createEvent(int $accountId, Event &$event): bool
     {
-        if (!$event->fullName) throw new InValidResourceException('Event', 'fullName');
-
-        if ($event->isPasswordProtected && !$event->password) {
-            throw new InValidResourceException('Event', 'password (password must be present for a password protected event)');
-        }
+        $event->validate();
 
         $response = $this->request("accounts/$accountId/events", 'post', $event);
 

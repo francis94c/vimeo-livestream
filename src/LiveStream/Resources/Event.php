@@ -2,11 +2,12 @@
 
 namespace LiveStream\Resources;
 
-use stdClass;
 use LiveStream\Resources\Resource;
+use LiveStream\Interfaces\Updatable\Updatable;
+use LiveStream\Exceptions\InValidResourceException;
 use LiveStream\Interfaces\Resource as ResourceInterface;
 
-class Event extends Resource implements ResourceInterface
+class Event extends Resource implements ResourceInterface, Updatable
 {
     /**
      * Class Constructor.
@@ -139,8 +140,8 @@ class Event extends Resource implements ResourceInterface
             'isWhiteLabeled'            => $this->data->isWhiteLabeled ?? null,
             'embedRestriction'          => $this->data->embedRestriction ?? null,
             'embedRestrictionWhitelist' => $this->data->embedRestrictionWhitelist ?? null,
-            'embedRestrictionBlacklist' => $this->data->embedRestrictionBlacklist ?? null,            
-        ]);   
+            'embedRestrictionBlacklist' => $this->data->embedRestrictionBlacklist ?? null,
+        ]);
 
         return json_encode($body);
     }
@@ -168,5 +169,37 @@ class Event extends Resource implements ResourceInterface
     public function getContentType(): string
     {
         return 'application/json';
+    }
+
+    /**
+     * Validates the Event Resource.
+     * 
+     * @param bool $exists Whether resource is exists (being updated) or not.
+     * 
+     * @return void
+     */
+    public function validate(bool $exists = false): void
+    {
+        if (!$this->data->fullName ?? null) throw new InValidResourceException('Event', 'fullName');
+
+        if (($this->data->isPasswordProtected ?? false) && (!$this->data->password ?? null)) {
+            throw new InValidResourceException('Event', 'password (password must be present for a password protected event)');
+        }
+
+        if ($exists) {                   
+            if (!$this->data->id ?? null) {
+                throw new InValidResourceException('Event', 'id (Event ID must be present while updating an event.)');
+            }
+        }
+    }
+
+    /**
+     * Update Resource.
+     *
+     * @return boolean
+     */
+    public function update(bool $new = true): bool
+    {
+        return false;
     }
 }
