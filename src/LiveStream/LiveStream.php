@@ -57,6 +57,23 @@ class LiveStream
     }
 
     /**
+     * Singleton getInstance function.
+     *
+     * @param  string|null $apiKey
+     * @return \LiveStream\LiveStream
+     */
+    public static function getInstance(?string $apiKey = null): LiveStream
+    {
+        if (self::$instance == null) {
+            self::$instance = new static($apiKey);
+        }
+
+        if ($apiKey) self::$instance->apiKey = $apiKey;
+
+        return self::$instance;
+    }
+
+    /**
      * Get Linked LiveStream Accounts
      *
      * @return array Array of LiveStream Accounts 
