@@ -126,6 +126,24 @@ class LiveStream
     }
 
     /**
+     * Update Event.
+     *
+     * @param  integer $accountId
+     * @param  LiveStream\Resources\Event $event
+     * @return boolean
+     */
+    public function updateEvent(int $accountId, Event $event): bool
+    {
+        $event->validate(true);
+
+        $response = $this->request("accounts/$accountId/events/$event->id", 'put', $event);        
+
+        if ($response === null) return false;
+
+        return true;
+    }
+
+    /**
      * Get RTMP Key.
      *
      * @param  integer $accountId
