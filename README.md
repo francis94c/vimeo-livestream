@@ -60,9 +60,9 @@ $event->setDescription("Motion")
     ->addTag('a')
     ->setId(3456343);
 
-    $livestream = new LiveStream('abc');
+$livestream = new LiveStream('abc');
 
-    $livestream->updateEvent(5637245, $event);
+$livestream->updateEvent(5637245, $event);
 ```
 
 ### Get RTMP Key ###
