@@ -3,11 +3,10 @@
 namespace LiveStream\Resources;
 
 use LiveStream\Resources\Resource;
-use LiveStream\Interfaces\Updatable\Updatable;
 use LiveStream\Exceptions\InValidResourceException;
 use LiveStream\Interfaces\Resource as ResourceInterface;
 
-class Event extends Resource implements ResourceInterface, Updatable
+class Event extends Resource implements ResourceInterface
 {
     /**
      * Class Constructor.
@@ -191,15 +190,5 @@ class Event extends Resource implements ResourceInterface, Updatable
                 throw new InValidResourceException('Event', 'id (Event ID must be present while updating an event.)');
             }
         }
-    }
-
-    /**
-     * Update Resource.
-     *
-     * @return boolean
-     */
-    public function update(bool $new = true): bool
-    {
-        return false;
     }
 }

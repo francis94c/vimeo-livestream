@@ -15,13 +15,6 @@ use LiveStream\Exceptions\InValidResourceException;
 class LiveStream
 {
     /**
-     * LiveStream Instance
-     *
-     * @var \LiveStream\LiveStream;
-     */
-    private static $instance = null;
-
-    /**
      * Live Stream API Base URL.
      */
     const BASE_URL = 'https://livestreamapis.com/v3/';
@@ -54,23 +47,6 @@ class LiveStream
     public function __construct(string $apiKey)
     {
         $this->apiKey = $apiKey;
-    }
-
-    /**
-     * Singleton getInstance function.
-     *
-     * @param  string|null $apiKey
-     * @return \LiveStream\LiveStream
-     */
-    public static function getInstance(?string $apiKey = null): LiveStream
-    {
-        if (self::$instance == null) {
-            self::$instance = new static($apiKey);
-        }
-
-        if ($apiKey) self::$instance->apiKey = $apiKey;
-
-        return self::$instance;
     }
 
     /**
@@ -136,7 +112,7 @@ class LiveStream
     {
         $event->validate(true);
 
-        $response = $this->request("accounts/$accountId/events/$event->id", 'put', $event);        
+        $response = $this->request("accounts/$accountId/events/$event->id", 'put', $event);
 
         if ($response === null) return false;
 
