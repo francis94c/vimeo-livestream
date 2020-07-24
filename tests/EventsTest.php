@@ -126,11 +126,9 @@ class EventsTest extends TestCase
      */
     public function testCanCreateEventAndCheckDefaults(): void
     {
-        $livestream = new LiveStream('abc');
-
         $event = new Event("Physics Live Class on Motions.");
 
-        $livestream->createEvent(564653, $event);
+        LiveStream::getInstance('abc')->createEvent(564653, $event);
 
         $this->assertEquals('Physics Live Class on Motions.', $event->getFullName());
         $this->assertEquals('Physics Live Class on Motions.', $event->fullName);
@@ -149,8 +147,6 @@ class EventsTest extends TestCase
      */
     public function testCanCreateEvent(): void
     {
-        $livestream = new LiveStream('abc');
-
         $event = new Event("Physics Live Class on Motions.");
 
         $date = date('Y-m-d H:i:s');
@@ -163,7 +159,7 @@ class EventsTest extends TestCase
             ->addTag('a')
             ->addTag('a');
 
-        $livestream->createEvent(564653, $event);
+        LiveStream::getInstance('abc')->createEvent(564653, $event);
 
         $this->assertEquals('Physics Live Class on Motions.', $event->getFullName());
         $this->assertEquals('Physics Live Class on Motions.', $event->fullName);

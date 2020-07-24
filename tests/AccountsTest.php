@@ -20,9 +20,7 @@ final class AccountsTest extends TestCase
      */
     public function testCanFetchAccounts(): void
     {
-        $livestream = new LiveStream('abc');
-
-        $accounts = $livestream->getAccounts();
+        $accounts = LiveStream::getInstance('abc')->getAccounts();
 
         $this->assertCount(2, $accounts);
 
@@ -56,9 +54,7 @@ final class AccountsTest extends TestCase
      */
     public function testCanFetchSpecificAccount(): void
     {
-        $livestream = new LiveStream('abc');
-
-        $account = $livestream->getAccount(18855760);
+        $account = LiveStream::getInstance('abc')->getAccount(18855760);
 
         $this->assertInstanceOf(Account::class, $account);
 
@@ -73,9 +69,7 @@ final class AccountsTest extends TestCase
      */
     public function testCanReturnNullForNonExistentAcount(): void
     {
-        $livestream = new LiveStream('abc');
-
-        $account = $livestream->getAccount(18855762);
+        $account = LiveStream::getInstance('abc')->getAccount(18855762);
 
         $this->assertNull($account);
     }

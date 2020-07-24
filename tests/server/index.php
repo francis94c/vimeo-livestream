@@ -169,6 +169,25 @@ class LiveStreamServerStub
             "isLive" => false
         ], 200);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @param  integer $accountId
+     * @param  integer $eventId
+     * @return void
+     */
+    public function processUpdateEventRequest(int $accountId, int $eventId): void
+    {
+        if ($accountId != 5637245 || $eventId != 3456343) {
+            Flight::json([
+                'code'    => 404,
+                'message' => ''
+            ], 404);
+            return;
+        }
+        Flight::json(json_decode(json_encode(Flight::request()->data)), 200);
+    }
 }
 
 $stub = new LiveStreamServerStub();
@@ -179,6 +198,7 @@ $stub = new LiveStreamServerStub();
 Flight::route('GET /accounts', [$stub, 'processGetAccountsRequest']);
 Flight::route('GET /accounts/@acountId', [$stub, 'processGetSpecificAccountRequest']);
 Flight::route('POST /accounts/@accountId/events', [$stub, 'processCreateEventRequest']);
+Flight::route('PUT /accounts/@accountId/events/@eventId', [$stub, 'processUpdateEventRequest']);
 
 /**
  * Configurations
