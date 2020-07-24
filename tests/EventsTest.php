@@ -128,7 +128,9 @@ class EventsTest extends TestCase
     {
         $event = new Event("Physics Live Class on Motions.");
 
-        LiveStream::getInstance('abc')->createEvent(564653, $event);
+        $livestream = new LiveStream('abc');
+
+        $livestream->createEvent(564653, $event);
 
         $this->assertEquals('Physics Live Class on Motions.', $event->getFullName());
         $this->assertEquals('Physics Live Class on Motions.', $event->fullName);
@@ -171,7 +173,9 @@ class EventsTest extends TestCase
             ->addTag('a')
             ->addTag('a');
 
-        LiveStream::getInstance('abc')->createEvent(564653, $event);
+        $livestream = new LiveStream('abc');
+
+        $livestream->createEvent(564653, $event);
 
         $this->assertEquals('Physics Live Class on Motions.', $event->getFullName());
         $this->assertEquals('Physics Live Class on Motions.', $event->fullName);
@@ -215,7 +219,9 @@ class EventsTest extends TestCase
             ->addTag('a')
             ->setId(3456343);
 
-        $this->assertTrue(LiveStream::getInstance('abc')->updateEvent(5637245, $event));
+        $livestream = new LiveStream('abc');
+
+        $this->assertTrue($livestream->updateEvent(5637245, $event));
     }
 
     /**
@@ -223,7 +229,7 @@ class EventsTest extends TestCase
      *
      * @return void
      */
-    public function testUpdateInvalidEvent():void
+    public function testUpdateInvalidEvent(): void
     {
         $event = new Event("Physics Live Class on Motions.");
 
@@ -238,6 +244,8 @@ class EventsTest extends TestCase
             ->addTag('a')
             ->setId(150);
 
-        $this->assertFalse(LiveStream::getInstance('abc')->updateEvent(5637245, $event));
+        $livestream = new LiveStream('abc');
+
+        $this->assertFalse($livestream->updateEvent(5637245, $event));
     }
 }
