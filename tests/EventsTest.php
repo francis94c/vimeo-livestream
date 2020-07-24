@@ -182,5 +182,8 @@ class EventsTest extends TestCase
 
         $this->assertEquals(['a', 'a'], $event->getTags());
         $this->assertEquals(['a', 'a'], $event->tags);
+
+        $this->assertTrue($event->getIsPublic());
+        $this->assertTrue($event->isPublic);
     }
 }
