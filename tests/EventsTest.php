@@ -137,6 +137,18 @@ class EventsTest extends TestCase
         $this->assertTrue($event->isDraft());
         $this->assertTrue($event->draft);
 
+        $this->assertTrue($event->getIsPublic());
+        $this->assertTrue($event->isPublic);
+
+        $this->assertTrue($event->getIsSearchable());
+        $this->assertTrue($event->isSearchable);
+
+        $this->assertTrue($event->getViewerCountVisible());
+        $this->assertTrue($event->viewerCountVisible);
+
+        $this->assertTrue($event->getPostCommentsEnabled());
+        $this->assertTrue($event->postCommentsEnabled);
+
         $this->assertEquals('', $event->getStartTime());
     }
 
@@ -181,5 +193,51 @@ class EventsTest extends TestCase
 
         $this->assertTrue($event->getIsPublic());
         $this->assertTrue($event->isPublic);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function testCanUpdateEvent(): void
+    {
+        $event = new Event("Physics Live Class on Motions.");
+
+        $date = date('Y-m-d H:i:s');
+
+        $event->setDescription("Motion")
+            ->setStartTime($date)
+            ->setEndTime($date)
+            ->setShortName("Physics Short Name")
+            ->setIsDraft(false)
+            ->addTag('a')
+            ->addTag('a')
+            ->setId(3456343);
+
+        $this->assertTrue(LiveStream::getInstance('abc')->updateEvent(5637245, $event));
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function testUpdateInvalidEvent():void
+    {
+        $event = new Event("Physics Live Class on Motions.");
+
+        $date = date('Y-m-d H:i:s');
+
+        $event->setDescription("Motion")
+            ->setStartTime($date)
+            ->setEndTime($date)
+            ->setShortName("Physics Short Name")
+            ->setIsDraft(false)
+            ->addTag('a')
+            ->addTag('a')
+            ->setId(150);
+
+        $this->assertFalse(LiveStream::getInstance('abc')->updateEvent(5637245, $event));
     }
 }
