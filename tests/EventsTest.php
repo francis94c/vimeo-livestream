@@ -208,11 +208,9 @@ class EventsTest extends TestCase
     {
         $event = new Event("Physics Live Class on Motions.");
 
-        $date = date('Y-m-d H:i:s');
-
         $event->setDescription("Motion")
-            ->setStartTime($date)
-            ->setEndTime($date)
+            ->setStartTime(date('Y-m-d H:i:s'))
+            ->setEndTime(date('Y-m-d H:i:s'))
             ->setShortName("Physics Short Name")
             ->setIsDraft(false)
             ->addTag('a')

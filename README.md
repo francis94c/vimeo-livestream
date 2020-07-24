@@ -45,6 +45,26 @@ $event->setShortName("Master Class"); /*Or*/ $event->shortName = 'Master Class';
 $event->setStartTime("2020-07-20 23:56:20"); /*Or*/ $event->startTime = /*Time in ISO8601 date time format*/
 ```
 
+### Update an Event ###
+```php
+use LiveStream\Resources\Event;
+
+$event = new Event("Physics Live Class on Motions.");
+
+$event->setDescription("Motion")
+    ->setStartTime(date('Y-m-d H:i:s'))
+    ->setEndTime(date('Y-m-d H:i:s'))
+    ->setShortName("Physics Short Name")
+    ->setIsDraft(false)
+    ->addTag('a')
+    ->addTag('a')
+    ->setId(3456343);
+
+    $livestream = new LiveStream('abc');
+
+    $livestream->updateEvent(5637245, $event);
+```
+
 ### Get RTMP Key ###
 ```php
 $key = $livestream->getRtmpKey(3456 /*Account ID*/, 4567, /*Event ID*/); // Returns \LiveStream\Resources\RTMPKey.
