@@ -5,6 +5,12 @@ PHP Client Library for Vimeo Live Stream.
 
 <p style="text-align:center;"><img width="200" src="https://livestream.com/assets/images/shared/livestream_og_image.jpg"/></p>
 
+Current Features Include
+* Create New Event.
+* Update an Event.
+* Get Associated Accounts.
+* Get Specific Accounts.
+
 ## Installation ##
 This Live Stream API is available on Packagist as francis94c/vimeo-livestream
 
