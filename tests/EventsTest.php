@@ -293,4 +293,20 @@ class EventsTest extends TestCase
 
         $this->assertCount(5, $events);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function testCanDeleteEvent():void
+    {
+        $livestream = new LiveStream('abc');
+
+        $event = $livestream->deleteEvent(5637245, 5201483);
+
+        $this->assertInstanceOf(Event::class, $event);
+
+        $this->assertEquals(5201483, $event->getId());
+    }
 }

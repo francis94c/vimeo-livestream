@@ -121,7 +121,24 @@ class LiveStream
     }
 
     /**
-     * Undocumented function
+     * Delete Event
+     *
+     * @param  integer $accountId
+     * @param  integer $eventId
+     * 
+     * @return boolean
+     */
+    public function deleteEvent(int $accountId, int $eventId): ?Event
+    {
+        $response = $this->request("accounts/$accountId/events/$eventId", 'delete');
+
+        if ($response === null) return null;
+
+        return Event::fromObject(json_decode($response));
+    }
+
+    /**
+     * Update Event Logo.
      *
      * @param  integer $accountId
      * @param  integer $eventId
@@ -201,7 +218,7 @@ class LiveStream
             'notifyFollowers' => $notifyFollowers,
             'publishVideo'    => $publishVideo,
             'saveVideo'       => $saveVideo
-        ]);        
+        ]);
 
         if ($response === null) return null;
 
@@ -253,6 +270,7 @@ class LiveStream
         if ($verb != 'get') {
             if ($verb == 'post') curl_setopt($ch, CURLOPT_POST, true);
             if ($verb == 'put') curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            if ($verb == 'delete') curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
             if ($body) {
                 curl_setopt($ch, CURLOPT_HTTPHEADER, [
                     'Content-Type: ' . $body->getContentType()
