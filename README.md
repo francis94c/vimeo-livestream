@@ -16,7 +16,7 @@ Current Features Include
 This Live Stream API is available on Packagist as francis94c/vimeo-livestream
 
 ```php
-$ composer require francis94c/vimeo-livestream
+$ composer require francis94c/vimeo-livestream:dev-master
 ```
 
 ## Usage ##
