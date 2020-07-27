@@ -149,6 +149,39 @@ class LiveStream
     }
 
     /**
+     * Get Draft Events
+     *
+     * @param integer $accountId
+     * @param integer $page
+     * @param integer $maxItems
+     * @param string  $order
+     * 
+     * @return array
+     */
+    public function getDraftEvents(
+        int $accountId,
+        int $page = 1,
+        int $maxItems = 10,
+        string $order = 'desc'
+    ): array {
+        $response = $this->request("accounts/$accountId/draft_events", 'get', null, [
+            'page'     => $page,
+            'maxItems' => $maxItems,
+            'order'    => $order
+        ]);
+
+        if ($response === null) return null;
+
+        $events = [];
+
+        foreach (json_decode($response)->data as $event) {
+            $events[] = Event::fromObject($event);
+        }
+
+        return $events;
+    }
+
+    /**
      * Get RTMP Key.
      *
      * @param  integer $accountId

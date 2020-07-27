@@ -260,4 +260,22 @@ class EventsTest extends TestCase
 
         $this->assertInstanceOf(Event::class, $event);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function testCanGetDraftEvents():void
+    {
+        $livestream = new LiveStream('abc');
+
+        $events = $livestream->getDraftEvents(5637245, 1, 20);        
+
+        $this->assertCount(20, $events);
+
+        $events = $livestream->getDraftEvents(5637245, 1, 5);        
+
+        $this->assertCount(5, $events);
+    }
 }
