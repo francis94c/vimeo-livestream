@@ -201,7 +201,7 @@ class LiveStream
             'notifyFollowers' => $notifyFollowers,
             'publishVideo'    => $publishVideo,
             'saveVideo'       => $saveVideo
-        ]);
+        ]);        
 
         if ($response === null) return null;
 

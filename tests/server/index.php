@@ -18,7 +18,7 @@ class LiveStreamServerStub
             ], 404);
             return;
         }
-        
+
         Flight::json([
             [
                 "id" => 18855759,
@@ -371,6 +371,68 @@ class LiveStreamServerStub
     /**
      * Undocumented function
      *
+     * @param  integer $accountId
+     * @param  integer $eventId
+     * @return void
+     */
+    public function processGetRtmpKeyRequest(int $accountId, int $eventId):void
+    {
+        if (!$this->authenticate()) {
+            Flight::json([
+                'code'    => 401,
+                'message' => 'Unauthorized – Your API key is incorrect.'
+            ], 404);
+            return;
+        }
+
+        if ($accountId != 5637245 || $eventId != 5201483) {
+            Flight::json([
+                'code'    => 404,
+                'message' => ''
+            ], 404);
+            return;
+        }
+
+        Flight::json([
+            "id"      => "m5m-25d-jr6-7yk?n=1&p=0",
+            "rtmpUrl" => "rtmp://rtmpin.livestreamingest.com/rtmpin"
+        ], 200);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param  integer $accountId
+     * @param  integer $eventId
+     * @return void
+     */
+    public function processResetRtmpKeyRequest(int $accountId, int $eventId):void
+    {
+        if (!$this->authenticate()) {
+            Flight::json([
+                'code'    => 401,
+                'message' => 'Unauthorized – Your API key is incorrect.'
+            ], 404);
+            return;
+        }
+
+        if ($accountId != 5637245 || $eventId != 5201483) {
+            Flight::json([
+                'code'    => 404,
+                'message' => ''
+            ], 404);
+            return;
+        }
+
+        Flight::json([
+            "id"      => "m5m-25d-jr6-7yk",
+            "rtmpUrl" => "rtmp://rtmpin.livestreamingest.com/rtmpin"
+        ], 200);
+    }
+
+    /**
+     * Undocumented function
+     *
      * @return void
      */
     private function  authenticate(): bool
@@ -429,6 +491,8 @@ Flight::route('POST /accounts/@accountId/events', [$stub, 'processCreateEventReq
 Flight::route('PUT /accounts/@accountId/events/@eventId', [$stub, 'processUpdateEventRequest']);
 Flight::route('PUT /accounts/@accountId/events/@eventId/logo', [$stub, 'processUpdateEventPosterRequest']);
 Flight::route('GET /accounts/@accountId/draft_events', [$stub, 'processGetDraftEvents']);
+Flight::route('GET /accounts/@accountId/events/@eventId/rtmp', [$stub, 'processGetRtmpKeyRequest']);
+Flight::route('PUT /accounts/@accountId/events/@eventId/rtmp', [$stub, 'processResetRtmpKeyRequest']);
 
 /**
  * Configurations
