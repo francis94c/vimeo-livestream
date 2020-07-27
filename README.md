@@ -10,6 +10,7 @@ Current Features Include
 * Update an Event.
 * Get Associated Accounts.
 * Get Specific Accounts.
+* Update Event Poster.
 
 ## Installation ##
 This Live Stream API is available on Packagist as francis94c/vimeo-livestream
