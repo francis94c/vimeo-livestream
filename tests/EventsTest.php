@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use LiveStream\Exceptions\InValidResourceException;
 use LiveStream\LiveStream;
 use LiveStream\Resources\Event;
 use PHPUnit\Framework\TestCase;
@@ -259,6 +260,20 @@ class EventsTest extends TestCase
         $event = $livestream->updateEventLogo(5637245, 5201483, __DIR__ . '/vimeo-livestream.jpg');
 
         $this->assertInstanceOf(Event::class, $event);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function testCannotUploadInvalidLogo():void
+    {
+        $livestream = new LiveStream('abc');
+
+        $this->expectException(InValidResourceException::class);
+
+        $event = $livestream->updateEventLogo(5637245, 5201483, __DIR__ . '/invalid_logo.txt');
     }
 
     /**
