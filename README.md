@@ -33,11 +33,13 @@ Before you proceed, note that `$livestream` function calls that return null, ind
 __Every other HTTP Response Code except 200 & 201 will throw an Exception.__
 
 ### Get Accounts ###
+Get all LiveStream accounts linked to API key.
 ```php
 $accounts = $livestream->getAccounts(); // Returns an array of account resources.
 ```
 
 ### Get Specific Account ###
+Get a specific LiveStream Account.
 ```php
 $account = $livestream->getAccount(23456 /*Account ID*/); // Returns \LiveStream\Resources\Account.
 ```
