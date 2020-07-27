@@ -11,6 +11,14 @@ class LiveStreamServerStub
      */
     public function processGetAccountsRequest(): void
     {
+        if (!$this->authenticate()) {
+            Flight::json([
+                'code'    => 401,
+                'message' => 'Unauthorized – Your API key is incorrect.'
+            ], 404);
+            return;
+        }
+        
         Flight::json([
             [
                 "id" => 18855759,
@@ -76,8 +84,23 @@ class LiveStreamServerStub
             ]
         ], 200);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @param integer $accountId
+     * @return void
+     */
     public function processGetSpecificAccountRequest(int $accountId): void
     {
+        if (!$this->authenticate()) {
+            Flight::json([
+                'code'    => 401,
+                'message' => 'Unauthorized – Your API key is incorrect.'
+            ], 404);
+            return;
+        }
+
         if ($accountId == 18855760) {
             Flight::json([
                 "id" => 18855760,
@@ -123,6 +146,14 @@ class LiveStreamServerStub
      */
     public function processCreateEventRequest(int $accountId): void
     {
+        if (!$this->authenticate()) {
+            Flight::json([
+                'code'    => 401,
+                'message' => 'Unauthorized – Your API key is incorrect.'
+            ], 404);
+            return;
+        }
+
         if (!Flight::request()->type == 'application/json') {
             Flight::json([
                 'code'    => 400,
@@ -179,6 +210,14 @@ class LiveStreamServerStub
      */
     public function processUpdateEventRequest(int $accountId, int $eventId): void
     {
+        if (!$this->authenticate()) {
+            Flight::json([
+                'code'    => 401,
+                'message' => 'Unauthorized – Your API key is incorrect.'
+            ], 404);
+            return;
+        }
+
         if ($accountId != 5637245 || $eventId != 3456343) {
             Flight::json([
                 'code'    => 404,
@@ -198,6 +237,14 @@ class LiveStreamServerStub
      */
     public function processUpdateEventPosterRequest(int $accountId, int $eventId): void
     {
+        if (!$this->authenticate()) {
+            Flight::json([
+                'code'    => 401,
+                'message' => 'Unauthorized – Your API key is incorrect.'
+            ], 404);
+            return;
+        }
+
         if ($accountId != 5637245 || $eventId != 5201483) {
             Flight::json([
                 'code'    => 404,
