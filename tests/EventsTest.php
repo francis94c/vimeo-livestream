@@ -83,6 +83,8 @@ class EventsTest extends TestCase
         $this->assertTrue($event->isDraft());
         $this->assertTrue($event->draft);
 
+        $this->assertTrue(isset($event->draft));
+
         $event->setIsDraft(false);
 
         $this->assertFalse($event->isDraft());
