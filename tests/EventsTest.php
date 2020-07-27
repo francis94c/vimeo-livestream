@@ -246,4 +246,18 @@ class EventsTest extends TestCase
 
         $this->assertFalse($livestream->updateEvent(5637245, $event));
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function testCanUploadEventLogo():void
+    {
+        $livestream = new LiveStream('abc');
+
+        $event = $livestream->updateEventLogo(5637245, 5201483, __DIR__ . '/vimeo-livestream.jpg');
+
+        $this->assertInstanceOf(Event::class, $event);
+    }
 }

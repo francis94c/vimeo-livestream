@@ -2,6 +2,7 @@
 
 namespace LiveStream;
 
+use CURLFile;
 use Exception;
 
 use LiveStream\Resources\Event;
@@ -120,6 +121,34 @@ class LiveStream
     }
 
     /**
+     * Undocumented function
+     *
+     * @param  integer $accountId
+     * @param  integer $eventId
+     * @param  string  $filePath
+     * @return boolean
+     */
+    public function updateEventLogo(int $accountId, int $eventId, string $filePath): Event
+    {
+        if (!in_array(mime_content_type($filePath), [
+            'image/png',
+            'image/jpg',
+            'image/jpeg',
+            'image/gif'
+        ])) {
+            throw new InValidResourceException('Logo', 'poster (MIME Type must be one of image/png, image/jpg, image/gif)');
+        }
+
+        $response = $this->request("accounts/$accountId/events/$eventId/logo", 'put', null, null, [
+            'logo' => new CURLFile($filePath, mime_content_type($filePath), basename($filePath))
+        ]);
+
+        if ($response == null) return null;
+
+        return Event::fromObject(json_decode($response));
+    }
+
+    /**
      * Get RTMP Key.
      *
      * @param  integer $accountId
@@ -172,7 +201,8 @@ class LiveStream
         string $endpoint,
         string $verb = 'get',
         ?Resource $body = null,
-        ?array $query = null
+        ?array $query = null,
+        ?array $multipartFormData = null
     ): ?string {
         $ch = curl_init();
 
@@ -195,6 +225,11 @@ class LiveStream
                     'Content-Type: ' . $body->getContentType()
                 ]);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $body->getResourceBody());
+            } elseif ($multipartFormData) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Content-Type: multipart/form-data'
+                ]);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $multipartFormData);
             }
         }
 
