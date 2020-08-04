@@ -11,6 +11,7 @@ Current Features Include
 * Get Associated Accounts.
 * Get Specific Accounts.
 * Update Event Poster.
+* Delete Event.
 
 ## Installation ##
 This Live Stream API is available on Packagist as francis94c/vimeo-livestream
@@ -28,7 +29,7 @@ use LiveStream\LiveStream;
 $livestream = new LiveStream('[YOUR_API_KEY]');
 ```
 
-Before you proceed, note that `$livestream` function calls that return null, indicates that the requested resource was not found. In summary, a 404 HTTP Response Code was received as a result of the call. 
+Before you proceed, note that `$livestream` function calls that return null, indicates that the requested resource was not found. In summary, a 404 HTTP Response Code was received as a result of the call.
 
 __Every other HTTP Response Code except 200 & 201 will throw an Exception.__
 
