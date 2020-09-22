@@ -166,14 +166,56 @@ class LiveStream
     }
 
     /**
+     * Gets Events by type.
+     *
+     * @param string $type
+     *   Valid values: draft, past, private, or upcoming.
+     * @param int $accountId
+     * @param int $page
+     * @param int $maxItems
+     * @param string $order
+     *
+     * @return array
+     *
+     * @throws \LiveStream\Exceptions\LiveStreamException
+     */
+    protected function getEvents(
+        string $type,
+        int $accountId,
+        int $page,
+        int $maxItems,
+        string $order
+    ) {
+        $events = [];
+
+        $response = $this->request("accounts/{$accountId}/{$type}_events", 'get', null, [
+          'page'     => $page,
+          'maxItems' => $maxItems,
+          'order'    => $order
+        ]);
+
+        if ($response === null) return $events;
+
+        foreach (json_decode($response)->data as $event) {
+            $events[] = Event::fromObject($event);
+        }
+
+        return $events;
+    }
+
+    /**
      * Get Draft Events
      *
      * @param integer $accountId
      * @param integer $page
      * @param integer $maxItems
-     * @param string  $order
-     * 
+     * @param string $order
+     *
      * @return array
+     *
+     * @throws \LiveStream\Exceptions\LiveStreamException
+     *
+     * @see https://livestream.com/developers/docs/api/#get-draft-events
      */
     public function getDraftEvents(
         int $accountId,
@@ -181,21 +223,76 @@ class LiveStream
         int $maxItems = 10,
         string $order = 'desc'
     ): array {
-        $response = $this->request("accounts/$accountId/draft_events", 'get', null, [
-            'page'     => $page,
-            'maxItems' => $maxItems,
-            'order'    => $order
-        ]);
+        return $this->getEvents('draft', $accountId, $page, $maxItems, $order);
+    }
 
-        if ($response === null) return null;
+    /**
+     * Get Past Events
+     *
+     * @param integer $accountId
+     * @param integer $page
+     * @param integer $maxItems
+     * @param string $order
+     *
+     * @return array
+     *
+     * @throws \LiveStream\Exceptions\LiveStreamException
+     *
+     * @see https://livestream.com/developers/docs/api/#get-past-events
+     */
+    public function getPastEvents(
+        int $accountId,
+        int $page = 1,
+        int $maxItems = 10,
+        string $order = 'desc'
+    ): array {
+        return $this->getEvents('past', $accountId, $page, $maxItems, $order);
+    }
 
-        $events = [];
+    /**
+     * Get Private Events
+     *
+     * @param integer $accountId
+     * @param integer $page
+     * @param integer $maxItems
+     * @param string $order
+     *
+     * @return array
+     *
+     * @throws \LiveStream\Exceptions\LiveStreamException
+     *
+     * @see https://livestream.com/developers/docs/api/#get-private-events
+     */
+    public function getPrivateEvents(
+        int $accountId,
+        int $page = 1,
+        int $maxItems = 10,
+        string $order = 'asc'
+    ): array {
+        return $this->getEvents('private', $accountId, $page, $maxItems, $order);
+    }
 
-        foreach (json_decode($response)->data as $event) {
-            $events[] = Event::fromObject($event);
-        }
-
-        return $events;
+    /**
+     * Get Upcoming Events
+     *
+     * @param integer $accountId
+     * @param integer $page
+     * @param integer $maxItems
+     * @param string $order
+     *
+     * @return array
+     *
+     * @throws \LiveStream\Exceptions\LiveStreamException
+     *
+     * @see https://livestream.com/developers/docs/api/#get-upcoming-events
+     */
+    public function geUpcomingEvents(
+        int $accountId,
+        int $page = 1,
+        int $maxItems = 10,
+        string $order = 'asc'
+    ): array {
+        return $this->getEvents('upcoming', $accountId, $page, $maxItems, $order);
     }
 
     /**
