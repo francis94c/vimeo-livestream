@@ -12,6 +12,7 @@ use LiveStream\Interfaces\Resource;
 
 use LiveStream\Exceptions\LiveStreamException;
 use LiveStream\Exceptions\InValidResourceException;
+use LiveStream\Resources\Video;
 
 class LiveStream
 {
@@ -336,6 +337,48 @@ class LiveStream
         if ($response === null) return null;
 
         return RTMPKey::fromObject(json_decode($response));
+    }
+
+    /**
+     * Gets current live Video for an Event, if one exists.
+     *
+     * @param int $accountId
+     * @param int $eventId
+     * @param ?int $offsetPostId
+     * @param ?int $older
+     * @param ?int $newer
+     *
+     * @return \LiveStream\Resources\Video|null
+     *
+     * @see https://livestream.com/developers/docs/api/#get-videos
+     *
+     * @throws \LiveStream\Exceptions\LiveStreamException
+     */
+    public function getLiveVideo(
+      int $accountId,
+      int $eventId,
+      ?int $offsetPostId = null,
+      ?int $older = null,
+      ?int $newer = null
+    ): ?Video {
+        $video = null;
+
+        $response = $this->request("accounts/$accountId/events/$eventId/videos", 'get', null, [
+          'offsetPostId' => $offsetPostId,
+          'older'        => $older,
+          'newer'        => $newer
+        ]);
+
+        if ($response === null) return null;
+
+        $response_data = json_decode($response);
+
+        if ($response_data->live) {
+            /** @var \LiveStream\Resources\Video $video */
+            $video = Video::fromObject($response_data->live);
+        }
+
+        return $video;
     }
 
     /**
