@@ -58,7 +58,7 @@ class LiveStream
     /**
      * Secure access token.
      *
-     * @var array
+     * @var string
      */
     private $token;
 
@@ -92,7 +92,7 @@ class LiveStream
         $this->clientId = $clientId;
         $this->scope = $scope;
 
-        if ($this->clientId  && $this->scope) {
+        if ($this->clientId !== null && $this->scope !== null) {
             $this->refreshToken();
         }
     }
