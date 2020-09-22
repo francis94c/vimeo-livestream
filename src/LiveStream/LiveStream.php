@@ -100,7 +100,7 @@ class LiveStream
     /**
      * Get Linked LiveStream Accounts
      *
-     * @return array Array of LiveStream Accounts 
+     * @return array Array of LiveStream Accounts
      */
     public function getAccounts(): array
     {
@@ -172,7 +172,7 @@ class LiveStream
      *
      * @param  integer $accountId
      * @param  integer $eventId
-     * 
+     *
      * @return boolean
      */
     public function deleteEvent(int $accountId, int $eventId): ?Event
@@ -347,7 +347,7 @@ class LiveStream
      *
      * @param  integer $accountId
      * @param  integer $eventId
-     * 
+     *
      * @return \LiveStream\Resources\RTMPKey|null
      */
     public function getRtmpKey(
@@ -453,16 +453,42 @@ class LiveStream
     {
         $now = round(microtime(true) * 1000);
         if (!$this->tokenTimestamp || round(($now - $this->tokenTimestamp)/1000) > 300) {
-            $this->tokenTimestamp = (int) $now;
-            $this->token = hash_hmac('md5', "{$this->apiKey}:{$this->scope}:{$this->tokenTimestamp}", $this->apiKey);
+            $token = $this->generateToken();
+            $this->tokenTimestamp = $token['timestamp'];
+            $this->token = $token['token'];
         }
+    }
+
+    /**
+     * Generates a new token with optional scope override.
+     *
+     * @param string|null $scope
+     *
+     * @return array
+     */
+    private function generateToken(?string $scope = null): array {
+        $scope = $scope ?? $this->scope;
+        $timestamp = round(microtime(true) * 1000);
+        $token = hash_hmac('md5', "{$this->apiKey}:{$scope}:{$timestamp}", $this->apiKey);
+        return [
+            'timestamp' => (int) $timestamp,
+            'scope' => $scope,
+            'token' => $token,
+        ];
     }
 
     /**
      * CURL Request
      *
-     * @param  string $endpoint
-     * @return 
+     * @param string $endpoint
+     * @param string $verb
+     * @param \LiveStream\Interfaces\Resource|null $body
+     * @param array|null $query
+     * @param array|null $multipartFormData
+     *
+     * @return string|null
+     *
+     * @throws \LiveStream\Exceptions\LiveStreamException
      */
     private function request(
         string $endpoint,
@@ -479,6 +505,7 @@ class LiveStream
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
         if ($this->token && $this->clientId && $this->tokenTimestamp) {
+            $this->refreshToken();
             $query['timestamp'] = $this->tokenTimestamp;
             $query['clientId'] = $this->clientId;
             $query['token'] = $this->token;
