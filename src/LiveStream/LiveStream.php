@@ -428,6 +428,28 @@ class LiveStream
     }
 
     /**
+     * Gets URL of a Video's HLS stream (m3u8) file with access token.
+     *
+     * Requires a secure access token. Generates the URL using the "playback"
+     * scope.
+     *
+     * @param \LiveStream\Resources\Video $video
+     *
+     * @return string|null
+     */
+    public function getVideoHlsFileUrl(Video $video): ?string {
+        if (!$video->m3u8) return null;
+
+        $token = $this->generateToken('playback');
+        $query = [
+          'clientId' => $this->clientId,
+          'timestamp' => $token['timestamp'],
+          'token' => $token['token']
+        ];
+        return $video->m3u8 . '?' . http_build_query($query);
+    }
+
+    /**
      * Gets contents of a Video's HLS stream (m3u8) file.
      *
      * Requires a secure access token.
@@ -437,7 +459,7 @@ class LiveStream
      * @return string|null
      * @throws \LiveStream\Exceptions\LiveStreamException
      */
-    public function getVideoHlsFile(Video $video): ?string {
+    public function getVideoHlsFileContents(Video $video): ?string {
         if (!$video->m3u8) return null;
 
         $endpoint = substr($video->m3u8, strlen(self::BASE_URL));
