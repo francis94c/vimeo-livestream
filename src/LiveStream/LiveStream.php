@@ -35,20 +35,66 @@ class LiveStream
     ];
 
     /**
-     * API_KEY.
+     * API key.
      *
      * @var string
      */
     private $apiKey;
 
     /**
-     * Class Constructor
+     * Client ID.
+     *
+     * @var int
+     */
+    private $clientId;
+
+    /**
+     * Scope.
+     *
+     * @var string
+     */
+    private $scope;
+
+    /**
+     * Secure access token.
+     *
+     * @var array
+     */
+    private $token;
+
+    /**
+     * Secure access token timestamp.
+     *
+     * @var int
+     */
+    private $tokenTimestamp;
+
+    /**
+     * Class Constructor.
+     *
+     * When only an API key is provided key auth method is used. When an API
+     * key, client ID, and scope are provided secure token auth is used.
      *
      * @param string $apiKey
+     * @param int|null $clientId
+     * @param string|null $scope
+     *   Valid scopes are: all, readonly, playback
+     *
+     * @see https://livestream.com/developers/docs/api/#authentication
      */
-    public function __construct(string $apiKey)
+    public function __construct(
+        string $apiKey,
+        ?int $clientId = null,
+        ?string $scope = null
+    )
     {
         $this->apiKey = $apiKey;
+        $this->clientId = $clientId;
+        $this->scope = $scope;
+
+        if ($this->clientId  && $this->scope) {
+            $this->refreshToken();
+        }
     }
 
     /**
@@ -382,6 +428,20 @@ class LiveStream
     }
 
     /**
+     * Refreshes a secure access token if invalid (5 minute life time).
+     *
+     * @see https://github.com/Livestream/livestream-api-samples/tree/master/php/secure-token-auth-sample
+     */
+    private function refreshToken(): void
+    {
+        $now = round(microtime(true) * 1000);
+        if (!$this->tokenTimestamp || round(($now - $this->tokenTimestamp)/1000) > 300) {
+            $this->tokenTimestamp = (int) $now;
+            $this->token = hash_hmac('md5', "{$this->apiKey}:{$this->scope}:{$this->tokenTimestamp}", $this->apiKey);
+        }
+    }
+
+    /**
      * CURL Request
      *
      * @param  string $endpoint
@@ -398,14 +458,23 @@ class LiveStream
 
         if (!$ch) throw new Exception("Could not initialize CURL.");
 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+        if ($this->token && $this->clientId && $this->tokenTimestamp) {
+            $query['timestamp'] = $this->tokenTimestamp;
+            $query['clientId'] = $this->clientId;
+            $query['token'] = $this->token;
+        }
+        else {
+            curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey . ':');
+        }
+
         curl_setopt(
             $ch,
             CURLOPT_URL,
             $this->get_base_url() . $endpoint . ($query ? '?' . http_build_query($query) : '')
         );
-
-        curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey . ':');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         if ($verb != 'get') {
             if ($verb == 'post') curl_setopt($ch, CURLOPT_POST, true);
