@@ -428,6 +428,23 @@ class LiveStream
     }
 
     /**
+     * Gets contents of a Video's HLS stream (m3u8) file.
+     *
+     * Requires a secure access token.
+     *
+     * @param \LiveStream\Resources\Video $video
+     *
+     * @return string|null
+     * @throws \LiveStream\Exceptions\LiveStreamException
+     */
+    public function getVideoHlsFile(Video $video): ?string {
+        if (!$video->m3u8) return null;
+
+        $endpoint = substr($video->m3u8, strlen(self::BASE_URL));
+        return $this->request($endpoint);
+    }
+
+    /**
      * Refreshes a secure access token if invalid (5 minute life time).
      *
      * @see https://github.com/Livestream/livestream-api-samples/tree/master/php/secure-token-auth-sample
